@@ -5,14 +5,14 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public float speed;
-    public float groundDist;        // 지형 레이어에서 플레이어를 얼마나 띄울지 설정
-    public float jumpForce = 5f;    // 점프할때 힘크기
+    public float groundDist;            // 지형 레이어에서 플레이어를 얼마나 띄울지 설정
+    public float jumpForce = 5f;        // 점프할때 힘크기
     
-    public LayerMask testMap;       // 지형 레이어 설정
-    public Rigidbody rb;            // Rigidbody 컴포넌트      | 물리기반 이동처리
-    public SpriteRenderer sr;       // SpriteRenderer 컴포넌트 | 스프라이트 방향전환
+    public LayerMask testMap;           // 지형 레이어 설정
+    public Rigidbody rb;                // Rigidbody 컴포넌트      | 물리기반 이동처리
+    public SpriteRenderer sr;           // SpriteRenderer 컴포넌트 | 스프라이트 방향전환
 
-    private bool isGrounded = false; // 지면에 있는지 여부확인 | 공중 점프 방지용
+    private bool isGrounded = false;    // 지면에 있는지 여부확인  | 공중 점프 방지용
 
     void Start()
     {
@@ -21,10 +21,12 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        isGrounded = false;
+
         RaycastHit hit;
         Vector3 castPos = transform.position;
             castPos.y += 1;
-        isGrounded = false;
+        
         // 플레이어가 지면 위에 떠있는 좌표 방지용
         if (Physics.Raycast(castPos, -transform.up, out hit, Mathf.Infinity, testMap))
         {
@@ -50,12 +52,8 @@ public class PlayerMove : MonoBehaviour
 
         // 스프라이트 방향 전환용
         if (x != 0 && x < 0)
-        {
-            sr.flipX = true;                            // flipX -> 변수sr 참조
-        }
+        {   sr.flipX = true;    }
         else if (x != 0 && x > 0)
-        {
-            sr.flipX = false;
-        }
+        {   sr.flipX = false;   }
     }
 }
