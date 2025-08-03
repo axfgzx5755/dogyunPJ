@@ -15,10 +15,12 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
+        
     }
 
     private void Update()
     {
+        
         // 몬스터 처치 테스트용: P키로 포인트 증가
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -26,14 +28,23 @@ public class GameManager : MonoBehaviour
             LoadStageByPoint();
         }
     }
+    public void StartGame()
+    {
+        levelPoint++;
+        LoadStageByPoint();
+    }
 
     void LoadStageByPoint()
     {
         if (levelPoint <= maxStage)
-        {
-            string stageName = $"Stage{levelPoint}";
-            Debug.Log($"스테이지 전환: {stageName}");
-            SceneManager.LoadScene(stageName);
-        }
+    {
+        string stageName = $"Stage{levelPoint}";
+        SceneManager.LoadScene(stageName);
     }
+    else
+    {
+        Destroy(GameObject.Find("Player"));  // 🔥 여기서 파괴
+        SceneManager.LoadScene("EndScene");
+    }
+}
 }
