@@ -7,15 +7,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public int levelPoint = 1; // 시작 스테이지
+    public int levelPoint = 0; // 시작 스테이지
     private int maxStage = 3;
+    
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        
+
     }
 
     private void Update()
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
     }
     else
     {
-        Destroy(GameObject.Find("Player"));  // 🔥 여기서 파괴
+        Destroy(GameObject.Find("Player"));
         SceneManager.LoadScene("EndScene");
     }
 }
