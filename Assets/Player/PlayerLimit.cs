@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerLimit : MonoBehaviour
 {
-    public float minX = -5f;
-    public float maxX = 5f;
-    public float minZ = -5f;
-    public float maxZ = 5f;
+    public float minX = -20f;
+    public float maxX = 20f;
+    public float minZ = -10f;
+    public float maxZ = 10f;
     public float minY = 0f;  // 바닥 아래로 안 빠지게
 
     void Update()
