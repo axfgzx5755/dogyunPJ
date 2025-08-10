@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/KimWP/PlayerMove.cs.meta
+guid: 788197a831826f34d838b61cdf7e9754
+========
+guid: bda319989ff97894b95de46465c1b267
+>>>>>>>> origin/YunPJ:Assets/System/EndSceneManager.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
