@@ -1,9 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 <<<<<<<< HEAD:Assets/Scenes/KimWP/PlayerMove.cs.meta
 guid: 788197a831826f34d838b61cdf7e9754
 ========
 guid: bda319989ff97894b95de46465c1b267
 >>>>>>>> origin/YunPJ:Assets/System/EndSceneManager.cs.meta
+=======
+<<<<<<<< HEAD:Assets/System/EndSceneManager.cs.meta
+guid: bda319989ff97894b95de46465c1b267
+========
+guid: 7c94ba3a50ee2be4a8b4931f8f56dcf9
+>>>>>>>> KimPJ:Assets/Scenes/KimWP/PlayerMove.cs.meta
+>>>>>>> origin/YunPJ
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

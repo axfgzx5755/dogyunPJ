@@ -9,19 +9,48 @@ public class GameManager : MonoBehaviour
 
     public int levelPoint = 0; // 시작 스테이지
     private int maxStage = 3;
-    
+
+    public GameObject player;
+    public GameObject cameraObject;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
 
+            // 플레이어와 카메라 유지
+            if (player == null)
+                player = GameObject.FindWithTag("Player");
+
+            if (player != null)
+                DontDestroyOnLoad(player);
+
+            if (cameraObject == null)
+                cameraObject = GameObject.FindWithTag("MainCamera");
+
+            if (cameraObject != null)
+                DontDestroyOnLoad(cameraObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void Update()
     {
-        
         // 몬스터 처치 테스트용: P키로 포인트 증가
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -29,6 +58,7 @@ public class GameManager : MonoBehaviour
             LoadStageByPoint();
         }
     }
+
     public void StartGame()
     {
         levelPoint++;
@@ -38,14 +68,33 @@ public class GameManager : MonoBehaviour
     void LoadStageByPoint()
     {
         if (levelPoint <= maxStage)
-    {
-        string stageName = $"Stage{levelPoint}";
-        SceneManager.LoadScene(stageName);
+        {
+            string stageName = $"Stage{levelPoint}";
+            SceneManager.LoadScene(stageName);
+        }
+        else
+        {
+            Destroy(player);
+            SceneManager.LoadScene("EndScene");
+        }
     }
-    else
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Destroy(GameObject.Find("Player"));
-        SceneManager.LoadScene("EndScene");
+        // 씬 로딩 후 다시 플레이어와 카메라 찾기
+        if (player == null)
+            player = GameObject.FindWithTag("Player");
+
+        if (cameraObject == null)
+            cameraObject = GameObject.FindWithTag("MainCamera");
+
+        if (cameraObject != null && player != null)
+        {
+            FollowCamera follow = cameraObject.GetComponent<FollowCamera>();
+            if (follow != null)
+            {
+                follow.target = player.transform;
+            }
+        }
     }
-}
 }
