@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,49 +9,57 @@ public class PlayerMovement : MonoBehaviour
     [Header("Move/Jump")]
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
-    public LayerMask groundMask = ~0;   // Ground 레이어 지정 권장
-    public float groundProbe = 0.15f;   // 바닥 체크 거리
+    public LayerMask groundMask = ~0;
+    public float groundProbe = 0.15f;
 
     [Header("Animation")]
-    public Animator animator;           // SpriteHolder(스프라이트가 있는 자식)의 Animator
-    public SpriteRenderer sprite;       // 좌우반전(사이드뷰면 할당)
-    public bool attackRandom = false;   // true=랜덤, false=1-2-1-2 순서
-    int attackIndex = 0;                // 순차공격용
+    [SerializeField] private Animator animator;                             // 자동 탐색됨
+    [SerializeField] private RuntimeAnimatorController player1Animation;    // 기본 컨트롤러
+    public SpriteRenderer sprite;                                           // 사이드뷰면 할당
+    public bool attackRandom = true;
+
+    // Animator parameter hashes
+    static readonly int HashSpeed       = Animator.StringToHash("Speed");
+    static readonly int HashJump        = Animator.StringToHash("jump");
+    static readonly int HashAttack      = Animator.StringToHash("attack");
+    static readonly int HashAttackIndex = Animator.StringToHash("attackIndex");
+    static readonly int HashR           = Animator.StringToHash("R");
 
     Rigidbody rb;
+    Collider col;
     bool isGrounded = true;
     Vector3 inputDir;
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else { Destroy(gameObject); return; }
     }
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        // X/Z 회전 고정(넘어지는 것 방지)
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        if (animator == null)
-            Debug.LogWarning("Animator 미할당: SpriteHolder의 Animator를 할당하세요.");
+        if (!animator) animator = GetComponentInChildren<Animator>(true);
+        if (animator && player1Animation && animator.runtimeAnimatorController != player1Animation)
+            animator.runtimeAnimatorController = player1Animation;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+        if (!animator) Debug.LogWarning("[PlayerMovement] Animator가 없습니다.");
+        if (!player1Animation) Debug.LogWarning("[PlayerMovement] player1Animation 컨트롤러를 할당하세요.");
     }
 
     void Update()
     {
         ReadInput();
-        DriveAnimator();     // 애니메이션 파라미터 갱신
-        HandleJump();
-        HandleAttack();
-        FlipSprite();        // 선택: 좌우 반전
+        DriveAnimator();     // Speed 갱신
+        HandleJump();        // Space → jump
+        HandleAttack();      // LMB → attack + attackIndex(1/2)
+        HandleR();           // R → R
+        FlipSprite();        // 선택
     }
 
     void FixedUpdate()
@@ -74,76 +80,73 @@ public class PlayerMovement : MonoBehaviour
         if (inputDir.sqrMagnitude > 0f)
         {
             Vector3 target = rb.position + inputDir * moveSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(target); // Translate 대신 물리 이동
+            rb.MovePosition(target);
         }
     }
 
+    // Speed 파라미터 0~1로 반영
     void DriveAnimator()
     {
         if (!animator) return;
-        // 이동량을 0~1 범위로: 정지=0, 이동중≈1
-        float speed = inputDir.sqrMagnitude; // 0 또는 1
-        animator.SetFloat("Speed", speed);
+        animator.SetFloat(HashSpeed, inputDir.magnitude);
     }
 
+    // Space → jump
     void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // Y 초기화
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-
-            if (animator) animator.SetTrigger("jump");
+            if (animator) animator.SetTrigger(HashJump);
         }
     }
 
+    // 좌클릭 → attack + attackIndex(1/2)
     void HandleAttack()
-{
-    if (Input.GetMouseButtonDown(0))
     {
-        if (!animator) return;
-
-        // 랜덤으로 0 또는 1 선택
-        int randIndex = Random.Range(1, 3);
-
-        animator.SetInteger("PlayerAttackIndexAnimation", randIndex);
-        animator.SetTrigger("attack");
+        if (Input.GetMouseButtonDown(0) && animator)
+        {
+            int idx = attackRandom ? Random.Range(1, 3) : 1; // 1 또는 2
+            animator.SetInteger(HashAttackIndex, idx);
+            animator.SetTrigger(HashAttack);
+        }
     }
-}
+
+    // R → R 트리거
+    void HandleR()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && animator)
+            animator.SetTrigger(HashR);
+    }
 
     void FlipSprite()
     {
-        if (!sprite) return;            // 탑뷰면 생략 가능
+        if (!sprite) return;
         if (Mathf.Abs(inputDir.x) > 0.01f)
             sprite.flipX = (inputDir.x < 0f);
     }
 
     void GroundCheck()
     {
-        // 콜라이더 하단에서 짧게 Raycast
-        var col = GetComponent<Collider>();
-        Vector3 origin = transform.position;
-        float extY = 0.5f;
-        if (col) { origin = col.bounds.center; extY = col.bounds.extents.y; }
+        Vector3 origin = col ? col.bounds.center : transform.position;
+        float extY = col ? col.bounds.extents.y : 0.5f;
         isGrounded = Physics.Raycast(origin, Vector3.down, extY + groundProbe, groundMask);
-        // 디버그용: Debug.DrawLine(origin, origin + Vector3.down * (extY + groundProbe), Color.yellow);
+        // Debug.DrawLine(origin, origin + Vector3.down * (extY + groundProbe), Color.yellow);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        // 태그 방식도 병행 가능
         if (collision.gameObject.CompareTag("Ground")) isGrounded = true;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 스폰 포인트로 위치 리셋
         var spawn = GameObject.FindWithTag("PlayerSpawn");
         Vector3 pos = spawn ? spawn.transform.position : new Vector3(0, 1, 0);
-        float up = 0.02f;
-        var col = GetComponent<Collider>();
-        if (col) up += col.bounds.extents.y;
+        float up = 0.02f + (col ? col.bounds.extents.y : 0.5f);
+
         rb.isKinematic = true;
         rb.velocity = Vector3.zero; rb.angularVelocity = Vector3.zero;
         transform.SetPositionAndRotation(pos + Vector3.up * up, spawn ? spawn.transform.rotation : Quaternion.identity);
@@ -151,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
         rb.isKinematic = false;
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
