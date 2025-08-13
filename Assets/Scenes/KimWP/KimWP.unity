@@ -238,6 +238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 110008888}
   - component: {fileID: 110008889}
+  - component: {fileID: 110008890}
   m_Layer: 0
   m_Name: testPlayer
   m_TagString: Untagged
@@ -254,7 +255,7 @@ Transform:
   m_GameObject: {fileID: 110008887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.3068175, y: 0.3977914, z: -0.015692458}
+  m_LocalPosition: {x: -4.3068175, y: 0.95, z: -0.015692458}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -280,6 +281,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 7
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  groundProbe: 0.15
+  animator: {fileID: 0}
+  player1Animation: {fileID: 0}
+  sprite: {fileID: 0}
+  attackRandom: 1
+--- !u!54 &110008890
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110008887}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &175799164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,7 +1236,7 @@ SpriteRenderer:
   m_Size: {x: 1.86, y: 2.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2048847542

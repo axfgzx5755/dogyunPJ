@@ -16,13 +16,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator animator;                             // 자동 탐색됨
     [SerializeField] private RuntimeAnimatorController player1Animation;    // 기본 컨트롤러
     public SpriteRenderer sprite;                                           // 사이드뷰면 할당
-    public bool attackRandom = true;
+    [SerializeField] private bool attackRandom = true;
 
     // Animator parameter hashes
-    static readonly int HashSpeed       = Animator.StringToHash("Speed");
+    private const string ParamisMove      = "isMove";      // Trigger
     static readonly int HashJump        = Animator.StringToHash("jump");
-    static readonly int HashAttack      = Animator.StringToHash("attack");
-    static readonly int HashAttackIndex = Animator.StringToHash("attackIndex");
+    private const string ParamAttack      = "attack";      // Trigger
+    private const string ParamAttackIndex = "AttackIndex"; // Int
     static readonly int HashR           = Animator.StringToHash("R");
 
     Rigidbody rb;
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ReadInput();
-        DriveAnimator();     // Speed 갱신
+        // DriveAnimator();     // Speed 갱신
         HandleJump();        // Space → jump
         HandleAttack();      // LMB → attack + attackIndex(1/2)
         HandleR();           // R → R
@@ -85,11 +85,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Speed 파라미터 0~1로 반영
-    void DriveAnimator()
-    {
-        if (!animator) return;
-        animator.SetFloat(HashSpeed, inputDir.magnitude);
-    }
+    // void DriveAnimator()
+    // {
+    //     if (!animator) return;
+    //     animator.SetFloat(ParamisMove, inputDir.magnitude);
+    // }
 
     // Space → jump
     void HandleJump()
@@ -105,14 +105,20 @@ public class PlayerMovement : MonoBehaviour
 
     // 좌클릭 → attack + attackIndex(1/2)
     void HandleAttack()
+{
+    if (Input.GetMouseButtonDown(0) && animator)
     {
-        if (Input.GetMouseButtonDown(0) && animator)
-        {
-            int idx = attackRandom ? Random.Range(1, 3) : 1; // 1 또는 2
-            animator.SetInteger(HashAttackIndex, idx);
-            animator.SetTrigger(HashAttack);
-        }
+        // 1 또는 2
+        int idx = attackRandom ? Random.Range(1, 3) : 1;
+
+        // 먼저 인덱스 값 넣고, 그다음 트리거 발동
+        animator.SetInteger(ParamAttackIndex, idx);
+        animator.SetTrigger(ParamAttack);
+
+        // 디버깅 로그
+        Debug.Log($"Attack! idx={idx}");
     }
+}
 
     // R → R 트리거
     void HandleR()
