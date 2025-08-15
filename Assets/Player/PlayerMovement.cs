@@ -6,8 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance;
 
+
     [Header("Move/Jump")]
-    public float moveSpeed = 5f;
+    public float moveThreshold = 5f;
     public float jumpForce = 7f;
     public LayerMask groundMask = ~0;
     public float groundProbe = 0.15f;
@@ -55,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ReadInput();
-        // DriveAnimator();     // Speed 갱신
+        MoveBool();
         HandleJump();        // Space → jump
         HandleAttack();      // LMB → attack + attackIndex(1/2)
         HandleR();           // R → R
@@ -79,19 +80,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (inputDir.sqrMagnitude > 0f)
         {
-            Vector3 target = rb.position + inputDir * moveSpeed * Time.fixedDeltaTime;
+            Vector3 target = rb.position + inputDir * moveThreshold * Time.fixedDeltaTime;
             rb.MovePosition(target);
         }
     }
-
-    // Speed 파라미터 0~1로 반영
-    // void DriveAnimator()
-    // {
-    //     if (!animator) return;
-    //     animator.SetFloat(ParamisMove, inputDir.magnitude);
-    // }
-
-    // Space → jump
+    void MoveBool()
+    {
+        bool isMoving = inputDir.sqrMagnitude > 0f;
+        animator.SetBool("isMove", isMoving);
+    }
+    
     void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -149,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var spawn = GameObject.FindWithTag("PlayerSpawn");
+        var spawn = GameObject.FindWithTag("Respawn");
         Vector3 pos = spawn ? spawn.transform.position : new Vector3(0, 1, 0);
         float up = 0.02f + (col ? col.bounds.extents.y : 0.5f);
 
