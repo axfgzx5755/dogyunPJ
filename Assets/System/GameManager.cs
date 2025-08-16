@@ -96,5 +96,11 @@ public class GameManager : MonoBehaviour
                 follow.target = player.transform;
             }
         }
+            var spawner = FindObjectOfType<PushableBoxSpawner>();
+            if (spawner != null)
+            {
+            Debug.Log("박스스폰");
+                spawner.SpawnPushableBox();
+            }
     }
 }
