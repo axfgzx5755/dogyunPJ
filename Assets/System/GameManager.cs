@@ -54,8 +54,8 @@ public class GameManager : MonoBehaviour
         // 몬스터 처치 테스트용: P키로 포인트 증가
         if (Input.GetKeyDown(KeyCode.P))
         {
-            levelPoint++;
-            LoadStageByPoint();
+            levelPoint++; //씬 넘어가는 용도로 쓰는 레벨포인트
+            LoadStageByPoint(); //포인트에 맞는 스테이지 불러오는 코드
         }
     }
 
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)// 박스스폰 코드 호출해둔곳
     {
         // 씬 로딩 후 다시 플레이어와 카메라 찾기
         if (player == null)
@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
                 follow.target = player.transform;
             }
         }
-            var spawner = FindObjectOfType<PushableBoxSpawner>();
+            var spawner = FindObjectOfType<PushableBoxSpawner>();//박스 스폰 이거임
             if (spawner != null)
             {
             Debug.Log("박스스폰");

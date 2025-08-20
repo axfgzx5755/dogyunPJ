@@ -1596,7 +1596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65480076415d36e429c3aa1c2488eed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveThreshold: 1
+  moveThreshold: 5
   jumpForce: 7
   groundMask:
     serializedVersion: 2
