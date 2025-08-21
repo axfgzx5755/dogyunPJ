@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 861768530}
   m_Layer: 0
   m_Name: testPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1714,7 +1714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1164917409}
   - component: {fileID: 1164917408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: stageMap1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2093,6 +2093,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1518277250}
+  - component: {fileID: 1518277253}
+  - component: {fileID: 1518277252}
+  - component: {fileID: 1518277251}
+  - component: {fileID: 1518277255}
+  - component: {fileID: 1518277254}
+  - component: {fileID: 1518277256}
   m_Layer: 0
   m_Name: testEnemy1
   m_TagString: Untagged
@@ -2125,6 +2131,159 @@ Transform:
   - {fileID: 238784294}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1518277251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3a7f8940ce8824bad97024c4893c5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  minFireDistance: 6
+  maxFireDistance: 40
+  fireCooldown: 1.25
+  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 22
+  projectileLifetime: 6
+  faceToTargetWhenFire: 1
+--- !u!114 &1518277252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 082d5fb5095af4f45a3077dfac51d8e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3.5
+  stopDistance: 1
+  turnSpeed: 10
+  playerTag: Player
+  usePhysics: 0
+--- !u!54 &1518277253
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1518277254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58416eefabbc798479fee6bd04659bf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1518277255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dffb540fb5250f04b823e8120db4890a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  startFullOnAwake: 0
+  printDamageLog: 0
+  animator: {fileID: 0}
+  hitTriggerName: Hit
+  stunDuration: 0.25
+  knockbackForce: 0
+  knockbackForceMode: 1
+  deathTriggerName: Die
+  disableDelay: 0.05
+  destroyDelay: 3
+  disableCollidersOnDeath: 1
+  follow: {fileID: 1518277252}
+  attack1: {fileID: 1518277251}
+  extraBehaviours: []
+  rb: {fileID: 1518277253}
+  colliders: []
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDied:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1518277256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518277249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b27f2f10da51a244b1aa496e8660351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRange1:
+    x:
+      min: 0
+      max: 0
+    y:
+      min: 0
+      max: 0
+    z:
+      min: 0
+      max: 0
+  spawnRange2:
+    x:
+      min: 0
+      max: 0
+    y:
+      min: 0
+      max: 0
+    z:
+      min: 0
+      max: 0
+  enemyPrefab: {fileID: 1518277249}
+  initialDelay: 0
+  spawnInterval: 3
+  totalToSpawn: 10
+  autoStart: 1
+  useSpawnerRotation: 1
+  randomYaw: 0
+  spawnedCount: 0
 --- !u!1 &1575995462
 GameObject:
   m_ObjectHideFlags: 0
