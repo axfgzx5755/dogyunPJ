@@ -32,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
     static readonly int HashJump  = Animator.StringToHash("jump");
     const string ParamAttack      = "attack";      // Trigger
     const string ParamAttackIndex = "AttackIndex"; // Int
-    static readonly int HashR     = Animator.StringToHash("R");
+    static readonly int HashR     = Animator.StringToHash("R");   // 기존 R 트리거(이제 T키에서 사용)
+    const string ParamReload      = "playerReloadAnimation";      // 🔹재장전 트리거(Animator에 Trigger로 추가)
 
     // Components / state
     Rigidbody rb;
@@ -114,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         HandleAttack();  // 좌클릭 → 공격(인덱스 + 트리거)
-        HandleR();       // R → 기타 트리거
+        HandleR();       // R → 재장전(playerReloadAnimation)
         UpdateFacing();  // 좌/우 바라보기 갱신
     }
 
@@ -193,12 +194,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /// <summary>R키 트리거</summary>
+    /// <summary>R키 → 재장전 모션 실행</summary>
     void HandleR()
     {
         if (Input.GetKeyDown(KeyCode.R) && animator)
-            animator.SetTrigger(HashR);
+        {
+            animator.SetTrigger(ParamReload); // 🔹재장전 트리거
+            Debug.Log("[Reload] 재장전 애니메이션 실행");
+        }
     }
+
+    /// <summary>T키 → 기존 R 트리거 실행</summary>
     #endregion
 
     #region Facing
