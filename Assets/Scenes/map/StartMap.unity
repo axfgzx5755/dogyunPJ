@@ -1541,6 +1541,7 @@ GameObject:
   - component: {fileID: 2034735234}
   - component: {fileID: 2034735233}
   - component: {fileID: 2034735239}
+  - component: {fileID: 2034735240}
   m_Layer: 0
   m_Name: player1 1
   m_TagString: Player
@@ -1601,13 +1602,11 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  groundCheckDist: 0.25
   spawnGraceTime: 0.15
-  coyoteTime: 0.12
-  jumpBufferTime: 0.12
   animator: {fileID: 0}
   player1Animation: {fileID: 9100000, guid: 1c88b3053579bf842a763948a742361b, type: 2}
   sprite: {fileID: 0}
-  attackRandom: 1
   visualRoot: {fileID: 0}
 --- !u!54 &2034735235
 Rigidbody:
@@ -1666,6 +1665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  currentHealth: 0
 --- !u!212 &2034735238
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1739,6 +1739,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.56, y: 2.56, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2034735240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034735231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff5b74bbb4e5974d95b02e92d2f3397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipSize: 10
+  reserveAmmo: 20
+  currentAmmo: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

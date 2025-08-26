@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;   // 최대 체력
-    private int currentHealth;    // 현재 체력
+    public int currentHealth;    // 현재 체력
 
     void Start()
     {
